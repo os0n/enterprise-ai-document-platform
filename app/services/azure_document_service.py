@@ -1,5 +1,10 @@
-from azure.ai.formrecognizer import DocumentAnalysisClient
-from azure.core.credentials import AzureKeyCredential
+from azure.ai.documentintelligence import (
+    DocumentIntelligenceClient
+)
+
+from azure.core.credentials import (
+    AzureKeyCredential
+)
 
 from app.config.settings import (
     AZURE_ENDPOINT,
@@ -13,7 +18,7 @@ def analyze_invoice(
 
     try:
 
-        client = DocumentAnalysisClient(
+        client = DocumentIntelligenceClient(
             endpoint=AZURE_ENDPOINT,
             credential=AzureKeyCredential(
                 AZURE_KEY
@@ -22,7 +27,7 @@ def analyze_invoice(
 
         poller = client.begin_analyze_document(
             "prebuilt-invoice",
-            document=file_bytes
+            body=file_bytes
         )
 
         result = poller.result()

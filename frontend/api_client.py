@@ -4,8 +4,7 @@ import requests
 # =========================
 # API URLS
 # =========================
-BASE_URL = "http://127.0.0.1:8000"
-
+BASE_URL = "https://enterprise-ai-document-platform.onrender.com"
 DOCUMENTS_API = f"{BASE_URL}/api/v1/documents/documents"
 
 ANALYZE_API = f"{BASE_URL}/api/v1/documents/analyze-invoice"

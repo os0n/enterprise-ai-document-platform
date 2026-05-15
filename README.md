@@ -52,7 +52,7 @@ https://enterprise-ai-document-platform.onrender.com
 # Screenshots
 
 ## Dashboard
-(Add screenshot)
+![Dashboard](screenshots/dashboard.png)
 
 ## Upload Invoice
 (Add screenshot)

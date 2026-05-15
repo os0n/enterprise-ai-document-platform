@@ -50,9 +50,27 @@ def analyze_invoice(
                     return None
 
                 try:
-                    return field.value
+
+                    # =========================
+                    # VALUE
+                    # =========================
+                    if hasattr(field, "value"):
+
+                        if field.value is not None:
+                            return str(field.value)
+
+                    # =========================
+                    # CONTENT
+                    # =========================
+                    if hasattr(field, "content"):
+
+                        if field.content is not None:
+                            return str(field.content)
+
+                    return None
 
                 except Exception:
+
                     return None
 
             extracted_data = {
@@ -73,16 +91,12 @@ def analyze_invoice(
                     "InvoiceId"
                 ),
 
-                "invoice_date": str(
-                    get_field_value(
-                        "InvoiceDate"
-                    )
+                "invoice_date": get_field_value(
+                    "InvoiceDate"
                 ),
 
-                "due_date": str(
-                    get_field_value(
-                        "DueDate"
-                    )
+                "due_date": get_field_value(
+                    "DueDate"
                 ),
 
                 "invoice_total": get_field_value(

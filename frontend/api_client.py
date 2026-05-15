@@ -1,13 +1,19 @@
 import requests
+import streamlit as st
 
 
 # =========================
 # API URLS
 # =========================
-BASE_URL = "https://enterprise-ai-document-platform.onrender.com"
-DOCUMENTS_API = f"{BASE_URL}/api/v1/documents/documents"
+BASE_URL = st.secrets["API_BASE_URL"]
 
-ANALYZE_API = f"{BASE_URL}/api/v1/documents/analyze-invoice"
+DOCUMENTS_API = (
+    f"{BASE_URL}/api/v1/documents/documents"
+)
+
+ANALYZE_API = (
+    f"{BASE_URL}/api/v1/documents/analyze-invoice"
+)
 
 
 # =========================
@@ -27,7 +33,8 @@ def load_documents(token):
 
     response = requests.get(
         DOCUMENTS_API,
-        headers=get_auth_headers(token)
+        headers=get_auth_headers(token),
+        timeout=60
     )
 
     return response
@@ -52,7 +59,8 @@ def analyze_document(
     response = requests.post(
         ANALYZE_API,
         files=files,
-        headers=get_auth_headers(token)
+        headers=get_auth_headers(token),
+        timeout=120
     )
 
     return response

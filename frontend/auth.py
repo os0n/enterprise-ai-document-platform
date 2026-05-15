@@ -1,14 +1,19 @@
 import requests
+import streamlit as st
 
 
 # =========================
 # API URLS
 # =========================
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = st.secrets["API_BASE_URL"]
 
-LOGIN_API = f"{BASE_URL}/api/v1/auth/login"
+REGISTER_API = (
+    f"{BASE_URL}/api/v1/auth/register"
+)
 
-REGISTER_API = f"{BASE_URL}/api/v1/auth/register"
+LOGIN_API = (
+    f"{BASE_URL}/api/v1/auth/login"
+)
 
 
 # =========================
@@ -23,7 +28,8 @@ def login_user(email, password):
 
     response = requests.post(
         LOGIN_API,
-        data=data
+        data=data,
+        timeout=60
     )
 
     return response
@@ -46,7 +52,8 @@ def register_user(
 
     response = requests.post(
         REGISTER_API,
-        json=payload
+        json=payload,
+        timeout=60
     )
 
     return response

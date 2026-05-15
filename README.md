@@ -63,7 +63,7 @@ https://enterprise-ai-document-platform.onrender.com
 
 
 ## Documents
-![Documents](screenshots/documents.png)
+![Documents](screenshots/Documents.png)
 ---
 
 # Installation

@@ -68,7 +68,7 @@ https://enterprise-ai-document-platform.onrender.com
 
 # Installation
 
-bash
+```bash
 git clone https://github.com/os0n/enterprise-ai-document-platform.git
 ---
 # Future Improvements

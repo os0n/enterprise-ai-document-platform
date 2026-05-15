@@ -1,90 +1,83 @@
 # Enterprise AI Document Platform
 
-An AI-powered platform for intelligent document processing, invoice extraction, and workflow automation.
+An AI-powered document processing platform built using FastAPI, Streamlit, PostgreSQL, and Azure Document Intelligence.
 
-## Project Overview
-
-This project was built to simulate a real enterprise AI workflow used in modern companies for processing invoices and business documents automatically.
-
-The platform allows users to:
-
-* Upload invoices and documents
-* Extract important business information using AI
-* Store files securely in cloud storage
-* Apply workflow automation rules
-* Manage documents through a modern dashboard
-* Authenticate users securely using JWT
-
-The goal of this project was not only to build an OCR system, but to create a complete AI-powered SaaS-style platform with real-world architecture and workflows.
+The platform automates invoice processing by extracting structured information from invoices using OCR and AI services, then applying workflow automation logic for approval and review decisions.
 
 ---
 
-## Main Features
+# Live Demo
 
-* AI Invoice Processing using Azure Document Intelligence
-* OCR & Key Information Extraction
-* Workflow Automation System
-* JWT Authentication & User Management
-* PostgreSQL Database Integration
-* Azure Blob Storage Integration
-* Streamlit Dashboard
-* Protected FastAPI Endpoints
-* Enterprise-style Project Structure
+Frontend:
+https://enterprise-ai-document-platform-fwkqkrasedmlnwgz9suw5n.streamlit.app/
+
+Backend API:
+https://enterprise-ai-document-platform.onrender.com
 
 ---
 
-## Technologies Used
+# Features
 
-### Backend
-
-* FastAPI
-* PostgreSQL
-* SQLAlchemy
-* JWT Authentication
-
-### AI & Cloud
-
-* Azure Document Intelligence
-* Azure Blob Storage
-
-### Frontend
-
-* Streamlit
-* Pandas
+- JWT Authentication
+- AI Invoice OCR Processing
+- Azure Document Intelligence Integration
+- Workflow Automation
+- PostgreSQL Cloud Database
+- FastAPI REST APIs
+- Streamlit Dashboard
+- Cloud Deployment
 
 ---
 
-## Project Structure
+# Tech Stack
+
+## Backend
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+
+## Frontend
+- Streamlit
+- Pandas
+
+## AI & OCR
+- Azure Document Intelligence
+
+## Deployment
+- Render
+- Streamlit Community Cloud
+
+---
+
+# Screenshots
+
+## Dashboard
+(Add screenshot)
+
+## Upload Invoice
+(Add screenshot)
+
+## Documents
+(Add screenshot)
+
+---
+
+# Installation
 
 ```bash
-app/
-frontend/
-requirements.txt
-README.md
-```
+git clone https://github.com/os0n/enterprise-ai-document-platform.git
 
----
+# Future Improvements
 
-## Example Workflow
+Advanced workflow rules
+Admin dashboard
+PDF report exports
+Multi-document processing
+AI-powered anomaly detection
+Docker deployment
+Role-based access control
 
-1. User uploads an invoice
-2. AI extracts business information
-3. Workflow rules are applied automatically
-4. Results are stored in PostgreSQL
-5. Documents are displayed in the dashboard
+# Author
 
----
-
-## Future Improvements
-
-* Advanced workflow rules
-* AI document search
-* Deployment to cloud production
-* Multi-document processing
-* Analytics dashboard
-
----
-
-## Author
-
-Built by Osama as part of developing real-world AI engineering and intelligent automation skills.
+Osama Al Nemer
+AI & Data Science Engineer

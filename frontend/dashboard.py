@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import json
 
-from frontend.auth import (
+from auth import (
     login_user,
     register_user
 )
 
-from frontend.api_client import (
+from api_client import (
     load_documents,
     analyze_document
 )

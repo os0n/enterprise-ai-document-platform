@@ -71,8 +71,7 @@ https://enterprise-ai-document-platform.onrender.com
 ```bash
 git clone https://github.com/os0n/enterprise-ai-document-platform.git
 
-#Future Improvements
-
+# Future Improvements
 Advanced workflow rules
 Admin dashboard
 PDF report exports
@@ -81,7 +80,6 @@ AI-powered anomaly detection
 Docker deployment
 Role-based access control
 
-#Author
-
+# Author
 Osama Al Nemer
 AI & Data Science Engineer

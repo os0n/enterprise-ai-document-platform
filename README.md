@@ -55,11 +55,10 @@ https://enterprise-ai-document-platform.onrender.com
 ![Dashboard](screenshots/dashboard.png)
 
 ## Upload Invoice
-(Add screenshot)
+![Upload Invoice](screenshots/upload.png)
 
 ## Documents
-(Add screenshot)
-
+![Documents](screenshots/documents.png)
 ---
 
 # Installation

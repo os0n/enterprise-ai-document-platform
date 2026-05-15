@@ -50,12 +50,17 @@ https://enterprise-ai-document-platform.onrender.com
 ---
 
 # Screenshots
+## LogIN
+![LogIN](screenshots/login.png)
+
 
 ## Dashboard
 ![Dashboard](screenshots/dashboard.png)
 
 ## Upload Invoice
 ![Upload Invoice](screenshots/upload.png)
+![Upload Invoice](screenshots/upload2.png)
+
 
 ## Documents
 ![Documents](screenshots/documents.png)

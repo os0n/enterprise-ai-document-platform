@@ -1,9 +1,19 @@
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import (
+    APIRouter,
+    HTTPException,
+    Depends
+)
+
+from fastapi.security import (
+    OAuth2PasswordRequestForm
+)
 
 from sqlalchemy.orm import Session
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.database.database import get_db
+
 from app.database.models import User
 
 from app.schemas.user_schema import UserRegister
@@ -27,37 +37,61 @@ def register_user(
     db: Session = Depends(get_db)
 ):
 
-    existing_user = (
-        db.query(User)
-        .filter(User.email == user.email)
-        .first()
-    )
+    try:
 
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Email already registered."
+        existing_user = (
+            db.query(User)
+            .filter(User.email == user.email)
+            .first()
         )
 
-    hashed_password = hash_password(
-        user.password
-    )
+        if existing_user:
 
-    new_user = User(
-        email=user.email,
-        full_name=user.full_name,
-        hashed_password=hashed_password
-    )
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered."
+            )
 
-    db.add(new_user)
+        hashed_password = hash_password(
+            user.password
+        )
 
-    db.commit()
+        new_user = User(
+            email=user.email,
+            full_name=user.full_name,
+            hashed_password=hashed_password
+        )
 
-    db.refresh(new_user)
+        db.add(new_user)
 
-    return {
-        "message": "User registered successfully."
-    }
+        db.commit()
+
+        db.refresh(new_user)
+
+        return {
+            "message": "User registered successfully."
+        }
+
+    except HTTPException:
+        raise
+
+    except SQLAlchemyError as e:
+
+        db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Database Error: {str(e)}"
+        )
+
+    except Exception as e:
+
+        db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Server Error: {str(e)}"
+        )
 
 
 # =========================
@@ -69,34 +103,48 @@ def login_user(
     db: Session = Depends(get_db)
 ):
 
-    existing_user = (
-        db.query(User)
-        .filter(User.email == form_data.username)
-        .first()
-    )
+    try:
 
-    if not existing_user:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid email or password."
+        existing_user = (
+            db.query(User)
+            .filter(User.email == form_data.username)
+            .first()
         )
 
-    valid_password = verify_password(
-        form_data.password,
-        existing_user.hashed_password
-    )
+        if not existing_user:
 
-    if not valid_password:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid email or password."
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid email or password."
+            )
+
+        valid_password = verify_password(
+            form_data.password,
+            existing_user.hashed_password
         )
 
-    access_token = create_access_token({
-        "sub": existing_user.email
-    })
+        if not valid_password:
 
-    return {
-        "access_token": access_token,
-        "token_type": "bearer"
-    }
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid email or password."
+            )
+
+        access_token = create_access_token({
+            "sub": existing_user.email
+        })
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Login Error: {str(e)}"
+        )

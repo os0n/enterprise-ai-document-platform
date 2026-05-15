@@ -84,33 +84,47 @@ if not st.session_state.authenticated:
             use_container_width=True
         ):
 
-            response = login_user(
-                login_email,
-                login_password
-            )
+            try:
 
-            if response.status_code == 200:
-
-                token = response.json()[
-                    "access_token"
-                ]
-
-                st.session_state.access_token = token
-
-                st.session_state.authenticated = True
-
-                st.session_state.user_email = login_email
-
-                st.success(
-                    "Login successful."
+                response = login_user(
+                    login_email,
+                    login_password
                 )
 
-                st.rerun()
+                if response.status_code == 200:
 
-            else:
+                    token = response.json()[
+                        "access_token"
+                    ]
+
+                    st.session_state.access_token = token
+
+                    st.session_state.authenticated = True
+
+                    st.session_state.user_email = login_email
+
+                    st.success(
+                        "Login successful."
+                    )
+
+                    st.rerun()
+
+                else:
+
+                    st.error(
+                        f"Login failed. Status Code: {response.status_code}"
+                    )
+
+                    try:
+                        st.json(response.json())
+
+                    except Exception:
+                        st.text(response.text)
+
+            except Exception as e:
 
                 st.error(
-                    "Invalid email or password."
+                    f"Connection Error: {str(e)}"
                 )
 
     # =========================
@@ -141,34 +155,43 @@ if not st.session_state.authenticated:
             use_container_width=True
         ):
 
-            response = register_user(
-                register_email,
-                register_name,
-                register_password
-            )
+            try:
 
-            if response.status_code == 200:
-
-                st.success(
-                    "Account created successfully."
+                response = register_user(
+                    register_email,
+                    register_name,
+                    register_password
                 )
 
-            else:
+                if response.status_code == 200:
 
-                try:
-
-                    error_message = (
-                        response.json()
-                        .get("detail")
+                    st.success(
+                        "Account created successfully."
                     )
 
-                except Exception:
+                else:
 
-                    error_message = (
-                        "Registration failed."
+                    st.error(
+                        f"Registration failed. Status Code: {response.status_code}"
                     )
 
-                st.error(error_message)
+                    try:
+
+                        st.json(
+                            response.json()
+                        )
+
+                    except Exception:
+
+                        st.text(
+                            response.text
+                        )
+
+            except Exception as e:
+
+                st.error(
+                    f"Connection Error: {str(e)}"
+                )
 
 # =========================
 # MAIN APP
@@ -211,17 +234,25 @@ else:
     # =========================
     # LOAD DOCUMENTS
     # =========================
-    response = load_documents(
-        st.session_state.access_token
-    )
-
     documents = []
 
-    if response.status_code == 200:
+    try:
 
-        documents = response.json().get(
-            "documents",
-            []
+        response = load_documents(
+            st.session_state.access_token
+        )
+
+        if response.status_code == 200:
+
+            documents = response.json().get(
+                "documents",
+                []
+            )
+
+    except Exception as e:
+
+        st.error(
+            f"Failed to load documents: {str(e)}"
         )
 
     # =========================
@@ -229,7 +260,7 @@ else:
     # =========================
     if page == "Dashboard":
 
-        st.title(" Dashboard ")
+        st.title("Dashboard")
 
         total_documents = len(documents)
 
@@ -306,7 +337,7 @@ else:
     # =========================
     elif page == "Upload Invoice":
 
-        st.title(" Upload Invoice")
+        st.title("Upload Invoice")
 
         uploaded_file = st.file_uploader(
             "Upload Invoice",
@@ -328,93 +359,91 @@ else:
                     "Processing invoice with AI..."
                 ):
 
-                    response = analyze_document(
-                        st.session_state.access_token,
-                        uploaded_file
-                    )
+                    try:
 
-                    if response.status_code == 200:
-
-                        data = response.json()
-
-                        st.success(
-                            "Invoice processed successfully."
+                        response = analyze_document(
+                            st.session_state.access_token,
+                            uploaded_file
                         )
 
-                        # =========================
-                        # WORKFLOW RESULT
-                        # =========================
-                        workflow = data.get(
-                            "workflow",
-                            {}
-                        )
+                        if response.status_code == 200:
 
-                        st.subheader(
-                            "Workflow Decision"
-                        )
+                            data = response.json()
 
-                        st.json(workflow)
+                            st.success(
+                                "Invoice processed successfully."
+                            )
 
-                        # =========================
-                        # EXTRACTED DATA
-                        # =========================
-                        extracted_data = data.get(
-                            "extracted_data",
-                            {}
-                        )
+                            workflow = data.get(
+                                "workflow",
+                                {}
+                            )
 
-                        st.subheader(
-                            "Extracted Data"
-                        )
+                            st.subheader(
+                                "Workflow Decision"
+                            )
 
-                        extracted_table = []
+                            st.json(workflow)
 
-                        for key, value in extracted_data.items():
+                            extracted_data = data.get(
+                                "extracted_data",
+                                {}
+                            )
 
-                            extracted_table.append({
-                                "Field": key,
-                                "Value": str(value)
-                            })
+                            st.subheader(
+                                "Extracted Data"
+                            )
 
-                        df = pd.DataFrame(
-                            extracted_table
-                        )
+                            extracted_table = []
 
-                        st.dataframe(
-                            df,
-                            use_container_width=True
-                        )
+                            for key, value in extracted_data.items():
 
-                    else:
+                                extracted_table.append({
+                                    "Field": key,
+                                    "Value": str(value)
+                                })
+
+                            df = pd.DataFrame(
+                                extracted_table
+                            )
+
+                            st.dataframe(
+                                df,
+                                use_container_width=True
+                            )
+
+                        else:
+
+                            st.error(
+                                f"Failed to process invoice. Status Code: {response.status_code}"
+                            )
+
+                            try:
+
+                                st.json(
+                                    response.json()
+                                )
+
+                            except Exception:
+
+                                st.text(
+                                    response.text
+                                )
+
+                    except Exception as e:
 
                         st.error(
-                            "Failed to process invoice."
+                            f"Connection Error: {str(e)}"
                         )
 
-                        try:
-
-                            st.json(
-                                response.json()
-                            )
-
-                        except Exception:
-
-                            st.text(
-                                response.text
-                            )
-
-    
-
     # =========================
-    # DOCUMENTS 
+    # DOCUMENTS
     # =========================
     elif page == "Documents":
 
-        st.title(" Documents")
+        st.title("Documents")
 
         if documents:
-
-            import json
 
             table_data = []
 
@@ -443,9 +472,6 @@ else:
                     "invoice_date"
                 )
 
-                # =========================
-                # WORKFLOW BADGES
-                # =========================
                 workflow = doc.get(
                     "workflow_status",
                     "pending"
@@ -473,9 +499,6 @@ else:
 
                     workflow_badge = workflow
 
-                # =========================
-                # TABLE DATA
-                # =========================
                 table_data.append({
 
                     "Vendor": vendor,
